@@ -1,0 +1,7 @@
+{
+  "name": "bitter-bush-0b75",
+  "compatibility_date": "2025-10-15",   // ou uma data recente (AAAA-MM-DD)
+  "assets": {
+    "directory": "./"
+  }
+}
