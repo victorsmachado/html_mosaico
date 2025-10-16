@@ -6,151 +6,77 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     :root{
-      --gap:16px;
-      --bd:#e5e7eb;
-      --bg:#f5f7fb;
-      --card-min-h:520px;        /* altura mínima do card */
-      --hide-tabs-h:44px;        /* altura aproximada das abas do Power BI (para mascarar) */
+      /* <<< ajuste aqui se mudar o tamanho do relatório no Power BI >>> */
+      --w: 730px;     /* LARGURA EXATA do canvas da página (px)  */
+      --h: 280px;     /* ALTURA  EXATA do canvas da página (px)  */
+      --tabbar: 44px; /* altura aproximada da barra de abas do Power BI */
+      --gap: 16px;
+      --bd: #e5e7eb;
+      --bg: #f5f7fb;
     }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:var(--bg)}
-    header{padding:14px 18px;border-bottom:1px solid var(--bd);background:#fff}
-    h1{margin:0;font-size:18px}
+    *{ box-sizing: border-box; }
+    body{ margin:0; font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial; background: var(--bg); }
+    header{ padding: 14px 18px; border-bottom: 1px solid var(--bd); background:#fff; font-weight:600 }
+    .wrap{ padding: var(--gap); display: flex; flex-direction: column; gap: var(--gap); align-items:flex-start; }
 
-    .wrap{padding:var(--gap)}
-    .grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:var(--gap);
-    }
-    @media (max-width: 900px){
-      .grid{grid-template-columns:1fr}
-    }
-
+    /* Card (um embaixo do outro) */
     .card{
-      background:#fff;
-      border:1px solid var(--bd);
-      border-radius:10px;
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
-      min-height:var(--card-min-h);
+      background:#fff; border:1px solid var(--bd); border-radius:10px;
+      overflow:hidden; display:flex; flex-direction:column;
     }
-    .title{
-      padding:10px 12px;
-      border-bottom:1px solid var(--bd);
-      font-weight:600;
+    .title{ padding:10px 12px; border-bottom:1px solid var(--bd); font-weight:600; width:var(--w); }
+
+    /* Janela que contém o Power BI com tamanho EXATO do relatório */
+    .frame-wrap{
+      position:relative; width:var(--w); height:var(--h);
+      overflow:hidden; /* impede estourar do box */
     }
-
-
-    .frame-outer{
-      position:relative;
-      flex:1;
-      overflow:hidden;          
-      background:#fff;
-    }
-
-   
-    .stage{
-      position:absolute;
-      width:1280px;                 
-      height:720px;                 
-      transform-origin: top left;   
-      will-change: transform, left, top;
-    }
-
-   
-    .stage > iframe{
-      width:1280px;
-      height:calc(720px + var(--hide-tabs-h)); 
-      border:0;
-      display:block;
+    /* o iframe é deslocado para “comer” a barra de abas do Power BI */
+    .frame-wrap > iframe{
+      position:absolute; inset:0; border:0; width:100%;
+      height:calc(var(--h) + var(--tabbar));
+      top:calc(-1 * var(--tabbar));
       background:#f3f4f6;
-      transform: translateY(calc(-1 * var(--hide-tabs-h))); 
     }
-
-    
-    .mask{
-      position:absolute;
-      left:0; right:0; bottom:0;
-      height:var(--hide-tabs-h);
-      background:#fff;
-      pointer-events:none;
+    /* máscara para garantir que nada da barra apareça mesmo em variações de UI */
+    .frame-wrap > .mask{
+      position:absolute; left:0; right:0; bottom:0;
+      height:var(--tabbar); background:#fff; pointer-events:none;
       box-shadow:0 -1px 0 var(--bd) inset;
     }
   </style>
 </head>
 <body>
+  <header>Relatórios Integrados</header>
 
   <div class="wrap">
-    <div class="grid">
 
-      <!-- CARD 1 -->
-      <div class="card" data-design="1280x720">
-        <div class="title">Card 1 — One Page</div>
-        <div class="frame-outer">
-          <div class="stage">
-            <iframe
-              title="Card 1 — One Page" allowfullscreen
-              src="https://app.powerbi.com/reportEmbed?reportId=eaef244d-e350-4c0f-9144-79270d725380&groupId=73f1c96a-4da7-4e7d-8e08-4b5ce00bbda3&ctid=f3ee8880-3296-4093-95d5-e49c4ef98715&rs:embed=true&autoAuth=true&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=a4e55fd610dd3ca070be&bookmarkGuid=85e4f45d0cb0088c3c26">
-            </iframe>
-            <div class="mask"></div>
-          </div>
-        </div>
+    <!-- CARD 1 (tamanho EXATO 730x280) -->
+    <div class="card">
+      <div class="title">Card 1 — One Page</div>
+      <div class="frame-wrap">
+        <iframe
+          title="Card 1 — One Page"
+          allowfullscreen
+          src="https://app.powerbi.com/reportEmbed?reportId=eaef244d-e350-4c0f-9144-79270d725380&groupId=73f1c96a-4da7-4e7d-8e08-4b5ce00bbda3&ctid=f3ee8880-3296-4093-95d5-e49c4ef98715&rs:embed=true&autoAuth=true&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=a4e55fd610dd3ca070be&bookmarkGuid=85e4f45d0cb0088c3c26">
+        </iframe>
+        <div class="mask"></div>
       </div>
-
-      <!-- CARD 2 -->
-      <div class="card" data-design="1280x720">
-        <div class="title">Card 2 — ONPAGE - KPI - OTD</div>
-        <div class="frame-outer">
-          <div class="stage">
-            <iframe
-              title="Card 2 — ONPAGE - KPI - OTD" allowfullscreen
-              src="https://app.powerbi.com/reportEmbed?reportId=bd7393d6-0617-4133-8d56-f63b891b9250&groupId=719483f1-b44a-4b5f-9f19-bfa2fe6fd418&ctid=f3ee8880-3296-4093-95d5-e49c4ef98715&rs:embed=true&autoAuth=true&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=9e198e86db00aca0c786">
-            </iframe>
-            <div class="mask"></div>
-          </div>
-        </div>
-      </div>
-
     </div>
+
+    <!-- CARD 2 (EMBAIXO do Card 1) -->
+    <div class="card">
+      <div class="title">Card 2 — ONPAGE - KPI - OTD</div>
+      <div class="frame-wrap">
+        <iframe
+          title="Card 2 — ONPAGE - KPI - OTD"
+          allowfullscreen
+          src="https://app.powerbi.com/reportEmbed?reportId=bd7393d6-0617-4133-8d56-f63b891b9250&groupId=719483f1-b44a-4b5f-9f19-bfa2fe6fd418&ctid=f3ee8880-3296-4093-95d5-e49c4ef98715&rs:embed=true&autoAuth=true&navContentPaneEnabled=false&filterPaneEnabled=false&pageName=9e198e86db00aca0c786">
+        </iframe>
+        <div class="mask"></div>
+      </div>
+    </div>
+
   </div>
-
-  <script>
-
-    const DESIGN_W = 1280;
-    const DESIGN_H = 720;
-
-    function fitOne(card){
-      const outer = card.querySelector('.frame-outer');
-      const stage = card.querySelector('.stage');
-      if(!outer || !stage) return;
-
-      const w = outer.clientWidth;
-      const h = outer.clientHeight;
-
- 
-      const scale = Math.min(w / DESIGN_W, h / DESIGN_H);
-
- 
-      stage.style.transform = `scale(${scale})`;
-
-
-      const left = (w - DESIGN_W * scale) / 2;
-      const top  = (h - DESIGN_H * scale) / 2;
-      stage.style.left = `${left}px`;
-      stage.style.top  = `${top}px`;
-    }
-
-    function fitAll(){
-      document.querySelectorAll('.card').forEach(fitOne);
-    }
-
-
-    window.addEventListener('load', fitAll);
-    window.addEventListener('resize', fitAll);
-    
-    document.addEventListener('visibilitychange', fitAll);
-  </script>
 </body>
 </html>
